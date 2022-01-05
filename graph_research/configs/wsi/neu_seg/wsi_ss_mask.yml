@@ -1,0 +1,59 @@
+# trainer and evaluator
+#
+# CAMELYON16 Configuration File
+#
+seed     : 1337
+trainer  : 'wsiss' #'wsiseam' #
+evaluator: 'wsiss' #
+n_gpu    : 1
+
+arch:
+    backbone     : identity #slide_res38d  #identity
+    pooling      : wsiss
+    n_classes    : 2
+    input_dim    : 64
+    embedding    : 64
+data:
+    dataset    : wsicompressed
+    classmap   :
+      n   : 0
+      t   : 1
+
+    # camelyon
+    data_path  : '/media/philipchicco/CHICCO4TB/Development/projects/research_graph/graph_research/data/wsi/multiorgan/all_camelyon_train_test_100'
+    cam_path   : '/media/philipchicco/CHICCO4TB/Development/projects/graph_research_logs/wsi/camelyon/ratio_100/m1_l0/all'
+    
+    #
+    train_split: "train"
+    val_split  : "train"
+    test_split : "test"
+    nslides    : -1 #000 # per split, per class
+training:
+    epochs: 200  # 200 organs | colon
+    monitor: 'loss'
+    train_batch_size: 4
+    val_batch_size  : 1
+    test_batch_size : 1
+    n_workers       : 6
+    lr    : 0.00001 # default Adam
+    fc_lr : 0.00001 
+    
+    resume: mil_model.pth
+    #
+    masked: True
+    w_c   : 1.0
+    w_h   : 1.0
+    w_er  : 1.0
+testing: # all paths are relative to the root
+    threshold_list: '0.1,0.2,0.3,0.4,0.5'
+    threshold : 0.5 
+    
+    feature   : 
+    checkpoint: 'mil_model.pth'
+    logdir    : 'test_seg' 
+    masks     : "/media/philipchicco/CHICCO4TB/Development/Data/HistoData/Camelyon16/v2/WSI_ALL"
+    
+# logs
+# change root dir of where to save logs
+root  : '/media/philipchicco/CHICCO4TB/Development/projects/graph_research_logs/logs/paper/wsi/cm16/ours_masked'
+logdir: ''

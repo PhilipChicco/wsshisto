@@ -1,0 +1,40 @@
+# trainer and evaluator
+seed     : 1337
+trainer  : 'patchencoder' #
+evaluator: 'patchencoder' #
+n_gpu    : 1
+
+arch:
+    backbone     : resnet18
+    pooling      : patch_embed 
+    n_classes    : 2
+    input_dim    : 512 # 
+    embedding    : 64  #
+data:
+    dataset    : wsifolders
+    classmap   :
+      tissue: 0
+    # camelyon16
+    data_path  : "/media/philipchicco/CHICCO4TB/Development/projects/graph_research_logs/wsi/camelyon/ratio_02/m1_l0/patches_norm/"
+
+    train_split: "train"
+    val_split  : "train"
+    test_split : "train"
+    nslides    : 10000 
+    
+training:
+    epochs: 20 
+    monitor: 'loss'
+    train_batch_size: 128 
+    val_batch_size  : 128 
+    test_batch_size : 1
+    n_workers       : 6
+    lr : 0.003 
+    resume: mil_model.pth
+testing: # all paths are relative to the root
+    checkpoint: 'mil_model.pth' # root +
+    logdir    : 'test'
+# logs
+# change root dir of where to save logs
+root  : './graph_research/logs/paper/wsi/camelyon_ratio_100/patch_encoder_m1_l0/'
+logdir: ''

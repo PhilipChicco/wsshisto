@@ -1,0 +1,48 @@
+# trainer and evaluator
+seed     : 1337
+trainer  : 'wsiseg' #
+evaluator: 'wsiseg' #
+n_gpu    : 1
+
+arch:
+    backbone     : slide_unet
+    pooling      : identity
+    n_classes    : 2
+    input_dim    : 64 # None
+    embedding    : 512
+data:
+    dataset    : wsicompressed
+    classmap   :
+      normal: 0
+      tumor : 1
+
+    # camelyon ration 100
+    data_path : '/media/philipchicco/CHICCO4TB/Development/projects/research_graph/graph_research/data/wsi/multiorgan/all_camelyon_train_test_100'
+    cam_path  : '/media/philipchicco/CHICCO4TB/Development/projects/graph_research_logs/wsi/camelyon/ratio_100/m1_l0/all'
+
+    train_split: "train"
+    val_split  : "train"
+    test_split : "test"
+    nslides    : -1 # per split, per class
+training:
+    epochs: 100  #
+    monitor: 'loss'
+    train_batch_size: 16
+    val_batch_size  : 1
+    test_batch_size : 1
+    n_workers       : 6
+    lr    : 0.0001 # 0.0001
+    fc_lr : 0.0001
+    resume: mil_model.pth
+testing: # all paths are relative to the root
+    resize:
+    threshold_list: '0.1,0.2,0.3,0.4,0.5'
+    threshold : 0.5
+    checkpoint: 'mil_model.pth' # root +
+    logdir    : 'test_seg'
+    masks     : "/media/philipchicco/CHICCO4TB/Development/Data/HistoData/Camelyon16/v2/WSI_ALL"
+    
+# logs
+# change root dir of where to save logs
+root  : '/media/philipchicco/CHICCO4TB/Development/projects/graph_research_logs/logs/paper/wsi/cm16/unet_base'
+logdir: ''
